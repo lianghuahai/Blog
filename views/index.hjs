@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  </head>
+  <body>
+    <!-- post request -->
+    <div id='dv1'>
+        <h2>Post your Comment</h2>
+            Name:<input type="text" id="author"><br>
+          <textarea  id='comment'></textarea>
+          <button id='postBtn'>Post Comment</button>
+          <h4>Comments</h4>
+      </div>
+      <div class="postArea"> </div>
+     <script>
+       (initializePage = () => {
+        $.ajax({
+            url: '/posts/queryComment',
+            method: 'post'
+        }).then((data) => {
+            data.forEach((e) => {
+                $('.postArea').append(`
+                    <div class="dv1">
+                        <div >
+                          <button onclick="openEdit(this)" type="button">Edit!</button><span   style="display:none">${e._id}</span>
+                          <button onclick="handleRemove(this)" type="button">Remove</button><br>
+                            Name:<input class="nameCss" name="author" disabled value="${e.author}">
+                        </div>
+                        <div > Post Content:<br>
+                            <textarea rows="4" cols="50" class="comment" disabled name="comment">${e.comment}
+                            </textarea>
+                        </div>
+                    </div>
+                `)
+            })
+        })
+    })()
+      $('#postBtn').click(()=>{
+        var author = $('#author').val();
+        var comment = $('#comment').val();
+        $.ajax({
+          type:'POST',
+          url:'/posts/addComment',
+          data:{
+            author,
+            comment
+          }
+        }).then((data)=>{
+          $('.postArea').append(`
+                <div class="dv1">
+                    <div >
+                      <button onclick="openEdit(this)" type="button">Edit!</button><span  id="spanid" style="display:none">${data._id}</span>
+                      <button onclick="handleRemove(this)" type="button">Remove</button><br>
+                        Name:<input class="nameCss" name="author"disabled  value="${data.author}">
+                    </div>
+                    <div > Post Content:<br>
+                        <textarea rows="4" cols="50" class="comment"  disabled name="comment">${data.comment}
+                        </textarea>
+                    </div>
+                </div>
+          `);
+        })
+      })
+      openEdit=(e)=>{
+        var _id =  $(e).siblings("span").html();
+         $(e).siblings("input").attr("disabled",false); 
+         $(e).parent().siblings("div").children("textarea").attr("disabled",false); 
+         $(e).parent().siblings("div").append(`
+         <div class="editbotton">
+            <button onclick="handleEdit(this)" type="button">Confirm!</button><span  id="spanid" style="display:none">${_id}</span>
+            <button onclick="cancleEdit(this)" type="button">Cancel!</button><br>
+          </div>
+        `)
+      }
+      cancleEdit=(e)=>{
+        var _id =  $(e).siblings("span").html();
+        $.ajax({
+            url: '/posts/findCommentById',
+            method: 'post',
+            data:{
+              _id
+            }
+        }).then((data) => {
+          var author = data.author;
+          var comment = data.comment;
+          $(e).parent().parent().siblings("div").children("input").val(author); 
+          $(e).parent().siblings("textarea").val(comment); 
+
+          $(e).parent().parent().siblings("div").children("input").attr("disabled",true); 
+          $(e).parent().siblings("textarea").attr("disabled",true); 
+          $(e).parent().remove();
+        })
+      }
+
+       handleEdit=(e)=>{
+         var _id =  $(e).siblings("span").html();
+         var author = $(e).parent().parent().siblings("div").children("input").val(); 
+         var comment = $(e).parent().siblings("textarea").val(); 
+         
+        $.ajax({
+          type:"post",
+          url :'/posts/updateComment',
+          data:{
+            _id,
+            author,
+            comment
+          }
+        }).then((data)=>{
+          // $("[name]").html();
+          // $(e).parent().parent().siblings("div").children("input").val("data.author"); 
+          // $(e).parent().siblings("textarea").val("data.comment"); 
+
+          $(e).parent().parent().siblings("div").children("input").attr("disabled",true); 
+          $(e).parent().siblings("textarea").attr("disabled",true); 
+          $(e).parent().remove();
+        })
+      }
+
+     
+      function handleRemove(e){
+        var id = $(e).siblings("span").html();
+        $.ajax({
+          type:"post",
+          url :'/posts/deleteComment',
+          data:{
+            id
+          }
+        }).then((data)=>{
+          $(e).parent().parent().remove()
+        })
+      }
+      
+    </script>
+  </body>
+</html>
