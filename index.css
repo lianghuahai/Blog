@@ -1,0 +1,71 @@
+* {
+    font-family: 'Barlow Semi Condensed', sans-serif;    
+}
+
+.commentBox {
+    height: auto;
+    width: relative;
+    box-shadow: 0 1px 8px 0 rgba(0,0,0,.2), 0 3px 4px 0 rgba(0,0,0,.14), 0 3px 3px -2px rgba(0,0,0,.12);
+    padding: 15px;
+    margin: 20px auto;
+}
+.commentBox .userInfo img{
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+}
+.userDetails{
+    display: inline-block;
+    line-height: 3px;
+    position: relative;
+    top: 10px;
+}
+#userName{
+    font-weight: 500px;
+    font-size: 15px;
+    color: #012c1b;
+}
+#userPosition{
+    font-weight: 100px;
+    font-size: 10px;
+    color: #858484;
+}
+#date {
+    font-size: 12px;
+    font-weight: 100px;
+    color: #858484;
+}
+.commentBody {
+    padding: 50px 0;
+}
+#commentFooter {
+height: 20px;    
+position: relative;
+}
+.viewResponse a {
+    color: rgb(53, 55, 71);
+    font-size: 12px;
+}
+.viewResponse a:hover {
+    cursor: pointer;
+}
+.viewResponse span {
+    margin-left: 10px;
+}
+.formBox{
+background-color: #012c1b;
+height: 100vh;
+padding: 10%;
+}
+.lableClass{
+    color: #ffffff;
+}
+#sad {
+    margin-top: 1.5px;
+    margin-left: 295px;
+    height: 40px;
+    width: 50px;
+}
+
+
+
