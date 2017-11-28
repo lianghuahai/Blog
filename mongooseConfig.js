@@ -7,12 +7,5 @@ db.once('open', function() {
   // we're connected!
   console.log("MongoDB we're connected!");
 });
-var kittySchema = mongoose.Schema({
-   author: String,
-    comment : String
-},{
-  versionKey: false
-});
-var Kitten = mongoose.model('Kitten', kittySchema);
 
-module.exports=Kitten
+module.exports=mongoose

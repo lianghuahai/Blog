@@ -50,7 +50,7 @@ createNewComment = () => {
                         </span>
                 </div>
             </div>
-        </div>
+        </div>  
         `)
     }
 }

@@ -3,18 +3,55 @@
   <head>
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
   </head>
   <body>
     <!-- post request -->
+    <!-- <div class="row">
+        <div class="col-md-5">
     <div id='dv1'>
-        <h2>Post your Comment</h2>
-            Name:<input type="text" id="author"><br>
-          <textarea  id='comment'></textarea>
+        
+            Name:  <input type="text" id="author"><br>
+            Comment: <textarea  id='comment'></textarea>
           <button id='postBtn'>Post Comment</button>
-          <h4>Comments</h4>
       </div>
+    </div>
+      <div class="col-md-5">
       <div class="postArea"> </div>
+    </div>
+    </div> -->
+    <h1 id="login">Login:</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="formBox">
+                <div class="form-group">
+                   <label class="lableClass" for="exampleFormControlTextarea1">Name:</label><input type="text" id="author"><br>
+                    <label class="lableClass" for="exampleFormControlTextarea1">Post Your Comment:</label>
+                    <textarea id="comment" class="form-control"  rows="3"></textarea>
+                </div>
+                <button id='postBtn' class="btn btn-dark float-right">Submit</button>
+                <center><img id="sad" src="../public/images/sadpepe.gif" alt="User"></center>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="postArea">
+            </div>
+        </div>
+    </div>
+    
      <script>
+      //  $('#login').click(()=>{
+      //    alert(1)
+      //     // $.ajax({
+      //     //   type:'POST',
+      //     //   url:'/login/',
+      //     // })
+      //     res.render('/login')
+      //  })
+
+
+
        (initializePage = () => {
         $.ajax({
             url: '/posts/queryComment',
@@ -22,17 +59,44 @@
         }).then((data) => {
             data.forEach((e) => {
                 $('.postArea').append(`
-                    <div class="dv1">
-                        <div >
-                          <button onclick="openEdit(this)" type="button">Edit!</button><span   style="display:none">${e._id}</span>
-                          <button onclick="handleRemove(this)" type="button">Remove</button><br>
-                            Name:<input class="nameCss" name="author" disabled value="${e.author}">
-                        </div>
-                        <div > Post Content:<br>
-                            <textarea rows="4" cols="50" class="comment" disabled name="comment">${e.comment}
-                            </textarea>
-                        </div>
-                    </div>
+                <div class="commentBox">
+                  <div class="commentHeadleft clearfix">
+                      <div class="float-left">
+                          <div class="userInfo">
+                              <img src="./public/images/pepe.jpeg" alt="">
+                              <div class="userDetails">
+                                  <p id="userName">${e.author}</p>
+                                  <p id="userPosition">Account Manager</p>
+                              </div>
+                              <button onclick="openEdit(this)" type="button">Edit!</button><span  id="spanid" style="display:none">${e._id}</span>
+                                <button onclick="handleRemove(this)" type="button">Remove</button><br>
+                          </div>
+                      </div>
+                      <div class="float-right" id="date">
+                          <p>10/10/2017</p>
+                      </div>
+                  </div>
+                  <div class="commentBody">
+                      ${e.comment}
+                  </div>
+                  <div id="commentFooter">
+                      <div class="float-right">
+                          <div class="viewResponse">
+                              <span>
+                                      <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                                      <a id="unlikeBtn" onclick="handleUnlike()">Dislike </a>
+                                  </span>
+                              <span>
+                                      <i class="fa fa-bookmark-o" aria-hidden="true"></i>            
+                                      <a id="bookmarkBtn">Bookmark</a>
+                                  </span>
+                              <span>
+                                      <i class="fa fa-share-alt-square" aria-hidden="true"></i>
+                                      <a id="shareBtn">Share</a>
+                                  </span>
+                          </div>
+                      </div>
+                  </div> 
                 `)
             })
         })
@@ -49,31 +113,63 @@
           }
         }).then((data)=>{
           $('.postArea').append(`
-                <div class="dv1">
-                    <div >
-                      <button onclick="openEdit(this)" type="button">Edit!</button><span  id="spanid" style="display:none">${data._id}</span>
+        <div class="commentBox">
+        <div class="commentHeadleft clearfix">
+            <div class="float-left">
+                <div class="userInfo">
+                    <img src="./public/images/pepe.jpeg" alt="">
+                    <div class="userDetails">
+                        <p id="userName">${data.author}</p>
+                        <p id="userPosition">Account Manager</p>
+                    </div>
+                    <button onclick="openEdit(this)" type="button">Edit!</button><span  id="spanid" style="display:none">${data._id}</span>
                       <button onclick="handleRemove(this)" type="button">Remove</button><br>
-                        Name:<input class="nameCss" name="author"disabled  value="${data.author}">
-                    </div>
-                    <div > Post Content:<br>
-                        <textarea rows="4" cols="50" class="comment"  disabled name="comment">${data.comment}
-                        </textarea>
-                    </div>
                 </div>
+            </div>
+            <div class="float-right" id="date">
+                <p>10/10/2017</p>
+            </div>
+        </div>
+        <div class="commentBody">
+            ${data.comment}
+        </div>
+        <div id="commentFooter">
+            <div class="float-right">
+                <div class="viewResponse">
+                    <span>
+                            <i class="fa fa-thumbs-o-down" aria-hidden="true"></i>
+                            <a id="unlikeBtn" onclick="handleUnlike()">Dislike </a>
+                        </span>
+                    <span>
+                            <i class="fa fa-bookmark-o" aria-hidden="true"></i>            
+                            <a id="bookmarkBtn">Bookmark</a>
+                        </span>
+                    <span>
+                            <i class="fa fa-share-alt-square" aria-hidden="true"></i>
+                            <a id="shareBtn">Share</a>
+                        </span>
+                </div>
+            </div>
+        </div>  
           `);
         })
       })
       openEdit=(e)=>{
-        var _id =  $(e).siblings("span").html();
-         $(e).siblings("input").attr("disabled",false); 
-         $(e).parent().siblings("div").children("textarea").attr("disabled",false); 
-         $(e).parent().siblings("div").append(`
-         <div class="editbotton">
+        var flag =$(e).parent().siblings("div").children("div").html();
+        if(flag ){
+          return;
+        }else{
+          var _id =  $(e).siblings("span").html();
+          $(e).siblings("input").attr("disabled",false); 
+          $(e).parent().siblings("div").children("textarea").attr("disabled",false); 
+          $(e).parent().siblings("div").append(`
+          <div class="editbotton">
             <button onclick="handleEdit(this)" type="button">Confirm!</button><span  id="spanid" style="display:none">${_id}</span>
             <button onclick="cancleEdit(this)" type="button">Cancel!</button><br>
-          </div>
-        `)
-      }
+            </div>
+            `)
+          }
+        }
       cancleEdit=(e)=>{
         var _id =  $(e).siblings("span").html();
         $.ajax({
@@ -118,7 +214,6 @@
         })
       }
 
-     
       function handleRemove(e){
         var id = $(e).siblings("span").html();
         $.ajax({
@@ -128,7 +223,7 @@
             id
           }
         }).then((data)=>{
-          $(e).parent().parent().remove()
+          $(e).parent().parent().parent().parent().remove()
         })
       }
       

@@ -1,0 +1,5 @@
+<form action="/login/checkLogin">
+    name :<input type="text">
+    password :<input type="text"><br>
+    <button type="submit">Submit</button>
+</form>
